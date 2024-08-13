@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "espn nfl api",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
