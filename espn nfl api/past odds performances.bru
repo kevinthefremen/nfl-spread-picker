@@ -1,0 +1,15 @@
+meta {
+  name: past odds performances
+  type: http
+  seq: 5
+}
+
+get {
+  url: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams/1/odds/1002/past-performances?limit=200
+  body: none
+  auth: none
+}
+
+params:query {
+  limit: 200
+}

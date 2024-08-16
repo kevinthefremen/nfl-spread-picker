@@ -1,0 +1,16 @@
+meta {
+  name: past events
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/320909008/competitions/320909008?lang=en&region=us
+  body: none
+  auth: none
+}
+
+params:query {
+  lang: en
+  region: us
+}
