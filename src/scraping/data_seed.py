@@ -1,5 +1,9 @@
 from src.db.get_db_client import get_database
 import requests
+from src.scraping.scrape_rosters import scrape_rosters
+from src.config import START_YEAR, END_YEAR
+from src.db.teams import get_all_teams
+from src.scraping.scrape_teams import scrape_team_names
 
 
 def insert_teams():
@@ -7,43 +11,18 @@ def insert_teams():
 
     teams_collection = db['teams']
 
-    teams_to_insert = get_teams()
+    teams_to_insert = scrape_team_names()
 
     teams_collection.insert_many(teams_to_insert)
 
     return teams_to_insert
 
 
-def get_teams() -> list:
-    r = requests.get(
-        'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams?limit=32')
-    resp = r.json()
+def insert_rosters():
+    db = get_database()
+    teams = get_all_teams(db)
 
-    team_urls = resp['items']
+    rosters = scrape_rosters(teams, START_YEAR, END_YEAR)
 
-    teams = []
-    for _url in team_urls:
-        url = _url['$ref']
-        team_info = get_team_info(url)
-        teams.append(team_info)
-
-    return teams
-
-
-def get_team_info(url: str) -> dict:
-    r = requests.get(url)
-    resp = r.json()
-
-    team_info = {
-        'espn_id': int(resp['id']),
-        'slug': resp['slug'],
-        'name': resp['displayName'],
-        'abbreviation': resp['abbreviation'],
-        'url': url,
-        'home_venue': {
-            'name': resp['venue']['fullName'],
-            'address': resp['venue']['address']
-        },
-    }
-
-    return team_info
+    rosters_collection = db['rosters']
+    rosters_collection.insert_many(rosters)

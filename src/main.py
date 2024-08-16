@@ -1,8 +1,8 @@
-from src.scraping.data_seed import insert_teams
+from src.scraping.data_seed import insert_rosters
 
 
 def main():
-    insert_teams()
+    insert_rosters()
 
 
 if __name__ == "__main__":
